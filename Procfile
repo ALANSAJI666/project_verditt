@@ -1,0 +1,1 @@
+web: gunicorn verditt.wsgi --log-file -

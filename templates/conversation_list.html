@@ -1,0 +1,47 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+  <h1>Conversations</h1>
+
+  <ul>
+    {% for conversation in conversations %}
+      <li>
+          "/conversations?conversation_id={{conversation.id}}"
+        <a href="/conversations?conversation_id={{conversation.id}}">
+          {{ conversation.participants }}
+        </a>
+        {% if conversation.unread_messages %}
+          <span class="unread">{{ conversation.unread_messages }}</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+<a href="{% url 'start_conversation' %}">Start a New Conversation</a>
+
+  <script>
+    var conversationSocket = new WebSocket(
+      'ws://' + window.location.host +
+      '/ws/conversation_list/');
+
+    conversationSocket.onmessage = function(e) {
+      var data = JSON.parse(e.data);
+      var conversationElement = document.querySelector('#conversation-' + data.conversation_id);
+      if (conversationElement) {
+        conversationElement.innerHTML = '<a href="' + data.url + '">' + data.name + '</a>';
+        if (data.unread_messages > 0) {
+          conversationElement.innerHTML += ' <span class="unread">' + data.unread_messages + '</span>';
+        }
+      } else {
+        var newConversationElement = document.createElement('li');
+        newConversationElement.innerHTML = '<a href="' + data.url + '">' + data.name + '</a>';
+        if (data.unread_messages > 0) {
+          newConversationElement.innerHTML += ' <span class="unread">' + data.unread_messages + '</span>';
+        }
+        newConversationElement.id = 'conversation-' + data.conversation_id;
+        document.querySelector('ul').appendChild(newConversationElement);
+      }
+    };
+  </script>
+{% endblock %}

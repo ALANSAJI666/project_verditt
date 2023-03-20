@@ -1,0 +1,72 @@
+<!-- trending.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trending Page - VERDITT</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+    }
+    nav a img {
+      margin-right: 8px;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 48px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 48px auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    li {
+      margin: 8px;
+      padding: 12px;
+      background-color: #eee;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+    }
+    li span {
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">
+
+      <span><b>VERDITT</b></span>
+    </a>
+    <a href="logout">Log out</a>
+  </nav>
+  <h1>Trending Topics</h1>
+  <ul>
+    {% for topic in trending_topics %}
+      <li>
+
+        <span>{{ topic}}</span>
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
