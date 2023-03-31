@@ -27,6 +27,7 @@ class Post(models.Model):
     id = models.UUIDField(primary_key=True, default= uuid.uuid4)
     user = models.CharField(max_length=100)
     image = models.ImageField(upload_to= 'post_images')
+    profileimg = models.ImageField( default='blank_profile_pic.png')
     caption = models.TextField()
     # rating = models.DecimalField(max_digits=2, decimal_places=1)
     created_at = models.DateTimeField(default=datetime.now)
@@ -43,6 +44,17 @@ class LikePost(models.Model):
     def __str__(self):
         return self.username
 
+class CommentPost(models.Model):
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    username = models.CharField(max_length=100)
+    post_id1 = models.CharField(max_length=500,default= 0)
+    comment = models.TextField()
+    profileimg = models.ImageField(default='blank_profile_pic.png')
+
+    def __str__(self):
+        return self.username
+
 
 class FollowersCount(models.Model):
     follower = models.CharField(max_length=100)
@@ -54,26 +66,6 @@ class Rating(models.Model):
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     user = models.CharField(max_length=100)
 
-# class Conversation(models.Model):
-#     user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conversations_as_user1')
-#     user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conversations_as_user2')
-#     started_at = models.DateTimeField(auto_now_add=True)
-#
-#     class Meta:
-#         unique_together = ['user1', 'user2']
-#
-#     def __str__(self):
-#         return f"{self.user1.username} - {self.user2.username}"
-
-
-# class Message(models.Model):
-#     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
-#     sender = models.ForeignKey(User, on_delete=models.CASCADE)
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#
-#     def __str__(self):
-#         return f"{self.sender.username} - {self.conversation.user1.username} - {self.conversation.user2.username}"
 
 
 

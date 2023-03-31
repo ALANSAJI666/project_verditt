@@ -83,8 +83,12 @@
 								<ul>
 									<li class="admin-name">
 									  <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 30px;"><b>{{user_profile.user.username}} -  <a href="/profile_statements/{{user_profile.user.username}}" style="color:blue ;white-space: nowrap; width: 110px; font-size: 25px;"><b>Statements</b></a></b><!--<i class="fa fa-check-circle" style="color: #48dbfb;" aria-hidden="true"></i>-->
-										  </h5>
-									  <!--<span>Group Admin</span>-->
+
+									  </h5>
+										<h3><i class="fa fa-star"></i>
+                                      <span class="rating-number">3.0</span></h3>
+<!--
+
 									</li>
 									<!--<li>
 										<a class="" href="javascript:void(0)" title="" data-ripple="">Go live!</a>
@@ -111,7 +115,7 @@
 		</section><!-- top area -->
 		<section>
 			<div class="bio">
-				{{user_profile.bio}}
+				<b>{{user_profile.bio}}</b>
 			</div>
 		</section>
 		<section>

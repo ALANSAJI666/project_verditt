@@ -30,6 +30,12 @@
       text-align: center;
       margin-top: 48px;
     }
+    .instruction {
+      text-align: center;
+      font-size: 18px;
+      padding: 24px;
+      background-color: #eee;
+    }
     ul {
       list-style: none;
       padding: 0;
@@ -59,6 +65,9 @@
     </a>
     <a href="logout">Log out</a>
   </nav>
+  <div class="instruction">
+    <p>Discover the most intriguing and unusual occurrences in the corporate world here!  </p>
+  </div>
   <h1>Trending Topics</h1>
   <ul>
     {% for topic in trending_topics %}

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-7ye&9zq+4&=n_0c=ih0r%)bp8r-a34qp$siyeih&!d*7gs!31*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['13.53.136.39','www.verditt.com','verditt.com','*']
 
 
 # Application definition
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'channels'
+
 
 
 ]
@@ -105,15 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Add channels layers configuration
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('localhost', 6379)],
-        },
-    },
-}
+
 
 
 # Internationalization

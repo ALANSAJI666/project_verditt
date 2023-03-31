@@ -25,18 +25,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "verditt.settings")
 # This application object is used by any ASGI server configured to use this file.
 django_application = get_asgi_application()
 
-# Import websocket application here, so apps from django_application are loaded first
-from . import routing  # noqa isort:skip
 
-from channels.routing import ProtocolTypeRouter, URLRouter  # noqa isort:skip
-
-
-application = ProtocolTypeRouter(
-    {
-        "http": get_asgi_application(),
-        "websocket": URLRouter(routing.websocket_urlpatterns),
-    }
-)
 """
 ASGI config for verditt project.
 

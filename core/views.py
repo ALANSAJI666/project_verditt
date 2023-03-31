@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Profile,Post,LikePost, FollowersCount
+from .models import Profile,Post,LikePost, FollowersCount,CommentPost
 from itertools import chain
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -72,10 +72,13 @@ def index(request):
 def upload(request):
     if request.method=='POST':
         user = request.user.username
+        user_object = User.objects.get(username=request.user.username)
+        user_profile = Profile.objects.get(user=user_object)
+        profileimg = user_profile.profileimg
         image = request.FILES.get('image_upload')
         caption = request.POST['caption']
 
-        new_post = Post.objects.create(user=user,image=image,caption = caption)
+        new_post = Post.objects.create(user=user,image=image,caption = caption,profileimg = profileimg)
         new_post.save()
         
         return redirect('/')
@@ -89,7 +92,9 @@ def search(request):
 
     if request.method == 'POST':
         username = request.POST['username']
-        username_object = User.objects.filter(username_icontains = username)
+        if username=='':
+            return redirect('/')
+        username_object = User.objects.filter(username__icontains = username)
 
         username_profile = []
         username_profile_list = []
@@ -261,6 +266,35 @@ def like_post(request):
         post.no_of_likes = post.no_of_likes-1
         post.save()
         return redirect('/')
+
+@login_required(login_url='signin')
+def comment_post(request):
+    username = request.user.username
+
+
+    user_object = User.objects.get(username=request.user.username)
+    user_profile = Profile.objects.get(user=user_object)
+    # post_id = request.POST['post_id1']
+    # if request.method == 'POST':
+    return redirect('/settings')
+
+    post_id = request.POST['post_id1']
+
+    post = Post.objects.get(id=post_id)
+    comment = request.POST.get('comment')
+
+    CommentPost.objects.create(comment=comment, post=post, post_id1=post_id, username=username,
+                               profileimg=user_profile.profileimg)
+
+
+
+
+
+    return redirect('/settings')
+
+
+
+
 
 
 
@@ -451,74 +485,11 @@ def signup_firm(request):
     else:
         return render(request,'signup_firm.html')
 
-# @login_required(login_url='signin')
-# def conversation_list(request):
-#     conversations = Conversation.objects.filter(participants = User.objects.get(username = request.user.username))
-#     return render(request, 'conversation_list.html', {'conversations': conversations})
 
-# @login_required(login_url='signin')
-# def conversation_detail(request, conversation_id):
-#     conversation = Conversation.objects.get(id=conversation_id)
-#     messages = conversation.messages.order_by('timestamp')
-#     return render(request, 'conversation_detail.html', {'conversation': conversation, 'messages': messages})
-
-# @login_required
-# def conversations(request):
-#     conversations = Conversation.objects.filter(Q(user1=request.user) | Q(user2=request.user))
-#     return render(request, 'messenger/conversation_list.html', {'conversations': conversations})
-
-
-# @login_required
-# def messages(request, conversation_id):
-#     conversation = get_object_or_404(Conversation, id=conversation_id)
-#     if request.user != conversation.user1 and request.user != conversation.user2:
-#         return redirect('conversations')
-#     messages = Message.objects.filter(conversation=conversation).order_by('-created_at')[:50][::-1]
-#     return render(request, 'messenger/messages.html', {'conversation': conversation, 'messages': messages})
-
-
-# @login_required
-# def start_conversation(request):
-#     if request.method == 'POST':
-#         username = request.POST.get('username')
-#         recipient = get_object_or_404(User, username=username)
-#         conversation = Conversation.objects.filter(user1=request.user, user2=recipient).first()
-#         if conversation:
-#             return redirect('messages', conversation_id=conversation.id)
-#         conversation = Conversation.objects.filter(user1=recipient, user2=request.user).first()
-#         if conversation:
-#             return redirect('messages', conversation_id=conversation.id)
-#         conversation = Conversation(user1=request.user, user2=recipient)
-#         conversation.save()
-#         return redirect('messages', conversation_id=conversation.id)
-#     else:
-#         return render(request, 'messenger/start_conversation.html')
-
-
-# def message_send(request, conversation_id):
-#     conversation = get_object_or_404(Conversation, id=conversation_id)
-#     if request.user != conversation.user1 and request.user != conversation.user2:
-#         return redirect('conversations')
-#     message = Message(conversation=conversation, sender=request.user, text=request.POST.get('message'))
-#     message.save()
-#     channel_layer = get_channel_layer()
-#     async_to_sync(channel_layer.group_send)(
-#         f"chat_{conversation_id}",
-#         {
-#             "type": "chat_message",
-#             "message": json.dumps({
-#                 "id": message.id,
-#                 "sender": message.sender.username,
-#                 "text": message.text,
-#                 "created_at": message.created_at.strftime('%Y-%m-%d %H:%M:%S')
-#             })
-#         }
-#     )
-#     return redirect('messages', conversation_id=conversation_id)
 
 @login_required(login_url='signin')
 def trending_page(request):
-    trending_topics = ['#Panther','#workplaceharrassment','#outrageous']
+    trending_topics = ['#Panther','#workplaceharrassment','#outrageous','#meta2023','#AIforHumanity','#StockMarketCrash']
     context = {'trending_topics': trending_topics}
     return render(request, 'trending_page.html', context)
 
